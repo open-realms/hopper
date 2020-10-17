@@ -1,0 +1,15 @@
+{
+  "name": "express-minecraft",
+  "version": "0.1.0",
+  "description": "A small express server used for managing minecraft servers",
+  "main": "minecraft.js",
+  "repository": "git@github.com:open-realms/express-minecraft.git",
+  "author": {
+    "name": "John Woodruff",
+    "email": "johnwoodruff91@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
