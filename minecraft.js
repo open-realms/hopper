@@ -52,7 +52,7 @@ app.post('/command', (req, res) => {
     buffer.push(data.split(']: ')[1]);
   };
   minecraftServerProcess.stdout.on('data', collector);
-  setTimeout(function() {
+  setTimeout(function () {
     minecraftServerProcess.stdout.removeListener('data', collector);
     res.send(buffer.join(''));
   }, 250);
