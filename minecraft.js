@@ -58,7 +58,7 @@ app.post('/command', (req, res) => {
   }, 250);
 });
 
-app.listen(port, () => console.log('Example app listening on port ${port}!'));
+app.listen(port, () => console.log('Server started'));
 
 function startMinecraft() {
   // Create a child process for the Minecraft server using the same java process
@@ -67,7 +67,7 @@ function startMinecraft() {
     '-Xmx1024M',
     '-Xms1024M',
     '-jar',
-    'server.jar',
+    'minecraft_server-run.jar',
     'nogui'
   ]);
 
