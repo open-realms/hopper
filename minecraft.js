@@ -1,4 +1,3 @@
-// Require Node.js standard library function to spawn a child process
 const spawn = require('child_process').spawn;
 let minecraftServerProcess;
 
@@ -8,9 +7,8 @@ const MINECRAFT_STATUS = {
 };
 let serverStatus = MINECRAFT_STATUS.NOT_RUNNING;
 
-// Express.js app listening for HTTP requests
-
 const express = require('express');
+const { join } = require('path');
 const app = express();
 app.use(express.json());
 const port = 3000;
@@ -61,13 +59,12 @@ app.post('/command', (req, res) => {
 app.listen(port, () => console.log('Server started'));
 
 function startMinecraft() {
-  // Create a child process for the Minecraft server using the same java process
-  // invocation we used manually before
+  const path = join(__dirname, 'minecraft', 'minecraft_server-run.jar');
   minecraftServerProcess = spawn('java', [
     '-Xmx1024M',
     '-Xms1024M',
     '-jar',
-    'minecraft_server-run.jar',
+    path,
     'nogui'
   ]);
 
