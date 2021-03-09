@@ -1,6 +1,9 @@
+const express = require('express');
+const { join } = require('path');
 const morgan = require('morgan');
-// Require Node.js standard library function to spawn a child process
+const fs = require('fs');
 const spawn = require('child_process').spawn;
+
 let minecraftServerProcess;
 
 const MINECRAFT_STATUS = {
@@ -9,12 +12,10 @@ const MINECRAFT_STATUS = {
 };
 let serverStatus = MINECRAFT_STATUS.NOT_RUNNING;
 
-const express = require('express');
-const { join } = require('path');
 const app = express();
 // create a write stream (in append mode)
 var accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'express-minecraft.log'),
+  join(__dirname, 'express-minecraft.log'),
   { flags: 'a' }
 );
 // setup the logger
