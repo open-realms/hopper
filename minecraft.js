@@ -70,13 +70,13 @@ app.listen(port, () => console.log('Server started'));
 
 function startMinecraft() {
   const path = join(__dirname, 'minecraft', 'minecraft_server-run.jar');
-  minecraftServerProcess = spawn('java', [
-    '-Xmx1024M',
-    '-Xms1024M',
-    '-jar',
-    path,
-    'nogui'
-  ]);
+  minecraftServerProcess = spawn(
+    'java',
+    ['-Xmx1024M', '-Xms1024M', '-jar', path, 'nogui'],
+    {
+      cwd: join(__dirname, 'minecraft')
+    }
+  );
 
   // Listen for events coming from the minecraft server process - in this case,
   // just log out messages coming from the server
