@@ -66,6 +66,14 @@ app.post('/command', (req, res) => {
   }, 250);
 });
 
+app.get('/properties', (req, res) => {
+  // read in server.properties and return it as JSON
+});
+
+app.put('/properties', (req, res) => {
+  // receive JSON and modify server.properties accordingly
+});
+
 app.listen(port, () => console.log('Server started'));
 
 function startMinecraft() {
@@ -96,10 +104,8 @@ function shutdownMinecraft() {
 function restartMinecraft() {
   if (serverStatus == MINECRAFT_STATUS.RUNNING) {
     shutdownMinecraft();
-    startMinecraft();
-  } else {
-    startMinecraft();
   }
+  startMinecraft();
 }
 
 function getMinecraftStatus() {
