@@ -96,10 +96,8 @@ function shutdownMinecraft() {
 function restartMinecraft() {
   if (serverStatus == MINECRAFT_STATUS.RUNNING) {
     shutdownMinecraft();
-    startMinecraft();
-  } else {
-    startMinecraft();
   }
+  startMinecraft();
 }
 
 function getMinecraftStatus() {
