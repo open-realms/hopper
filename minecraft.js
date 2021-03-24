@@ -67,11 +67,22 @@ app.post('/command', (req, res) => {
 });
 
 app.get('/properties', (req, res) => {
-  // read in server.properties and return it as JSON
+  const text = fs.readFileSync('./server.properties').toString('utf-8');
+  const result = fileToJSON(text);
+  res.send(result);
 });
 
 app.put('/properties', (req, res) => {
-  // receive JSON and modify server.properties accordingly
+  properties = req.body;
+  string = '#Minecraft server properties\n#(last boot timestamp)\n';
+  for (const property in properties) {
+    let sub_string = `${property}=${properties[property]}\n`;
+    string = string.concat(sub_string);
+  }
+  fs.writeFile('./server.properties', string, function (err) {
+    if (err) return console.log(err);
+  });
+  res.send({ status: 'server.properties successfully modified!' });
 });
 
 app.listen(port, () => console.log('Server started'));
@@ -110,4 +121,27 @@ function restartMinecraft() {
 
 function getMinecraftStatus() {
   return serverStatus;
+}
+
+function fileToJSON(input) {
+  var output = {};
+
+  input.split('\n').forEach(function (line) {
+    if (line[0] === '#') {
+      return;
+    }
+
+    let parts = line.split('=');
+
+    if (parts[0] === '') {
+      return;
+    }
+
+    let key = parts[0].trim();
+    let value = parts[1].trim();
+
+    output[key] = value;
+  });
+
+  return output;
 }
