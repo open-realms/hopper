@@ -73,10 +73,10 @@ app.get('/properties', (req, res) => {
 });
 
 app.put('/properties', (req, res) => {
-  properties = req.body;
-  string = '#Minecraft server properties\n#(last boot timestamp)\n';
+  const properties = req.body;
+  let string = '#Minecraft server properties\n#(last boot timestamp)\n';
   for (const property in properties) {
-    let sub_string = `${property}=${properties[property]}\n`;
+    const sub_string = `${property}=${properties[property]}\n`;
     string = string.concat(sub_string);
   }
   fs.writeFile('./server.properties', string, function (err) {
