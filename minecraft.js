@@ -6,6 +6,8 @@ const spawn = require('child_process').spawn;
 
 let minecraftServerProcess;
 
+const SERVER_PROPERTIES_LOCATION = './server.properties';
+
 const MINECRAFT_STATUS = {
   RUNNING: 'RUNNING',
   NOT_RUNNING: 'NOT_RUNNING'
@@ -66,6 +68,25 @@ app.post('/command', (req, res) => {
   }, 250);
 });
 
+app.get('/properties', async (req, res) => {
+  try {
+    const result = await getProperties(SERVER_PROPERTIES_LOCATION);
+    res.send(result);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
+app.put('/properties', async (req, res) => {
+  try {
+    const properties = req.body;
+    await writeProperties(SERVER_PROPERTIES_LOCATION, properties);
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
 app.listen(port, () => console.log('Server started'));
 
 function startMinecraft() {
@@ -96,12 +117,49 @@ function shutdownMinecraft() {
 function restartMinecraft() {
   if (serverStatus == MINECRAFT_STATUS.RUNNING) {
     shutdownMinecraft();
-    startMinecraft();
-  } else {
-    startMinecraft();
   }
+  startMinecraft();
 }
 
 function getMinecraftStatus() {
   return serverStatus;
+}
+
+function parseProperties(input) {
+  var output = {};
+
+  input.split('\n').forEach(line => {
+    if (line[0] === '#') {
+      return;
+    }
+
+    let parts = line.split('=');
+
+    // this use case handles empty lines and the end of the file
+    if (parts[0] === '') {
+      return;
+    }
+
+    let key = parts[0].trim();
+    let value = parts[1].trim();
+
+    output[key] = value;
+  });
+
+  return output;
+}
+
+async function getProperties(path) {
+  const text = (await fs.promises.readFile(path)).toString('utf-8');
+
+  return parseProperties(text);
+}
+
+async function writeProperties(path, properties) {
+  let string = '#Minecraft server properties\n#(last boot timestamp)\n';
+  for (const key in properties) {
+    const sub_string = `${key}=${properties[key]}\n`;
+    string = string.concat(sub_string);
+  }
+  return await fs.promises.writeFile(SERVER_PROPERTIES_LOCATION, string);
 }
