@@ -82,7 +82,7 @@ app.put('/properties', (req, res) => {
   fs.writeFile('./server.properties', string, function (err) {
     if (err) return console.log(err);
   });
-  res.send({ status: 'server.properties successfully modified!' });
+  res.status(204).send();
 });
 
 app.listen(port, () => console.log('Server started'));
