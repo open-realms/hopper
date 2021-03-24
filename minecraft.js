@@ -126,7 +126,7 @@ function getMinecraftStatus() {
 function parseProperties(input) {
   var output = {};
 
-  input.split('\n').forEach(function (line) {
+  input.split('\n').forEach(line => {
     if (line[0] === '#') {
       return;
     }
