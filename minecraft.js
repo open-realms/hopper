@@ -123,7 +123,7 @@ function getMinecraftStatus() {
   return serverStatus;
 }
 
-function fileToJSON(input) {
+function parseProperties(input) {
   var output = {};
 
   input.split('\n').forEach(function (line) {
