@@ -6,6 +6,8 @@ const spawn = require('child_process').spawn;
 
 let minecraftServerProcess;
 
+const SERVER_PROPERTIES_LOCATION = './server.properties';
+
 const MINECRAFT_STATUS = {
   RUNNING: 'RUNNING',
   NOT_RUNNING: 'NOT_RUNNING'
@@ -68,7 +70,7 @@ app.post('/command', (req, res) => {
 
 app.get('/properties', async (req, res) => {
   try {
-    const result = await getProperties('./server.properties');
+    const result = await getProperties(SERVER_PROPERTIES_LOCATION);
     res.send(result);
   } catch (e) {
     res.status(500).send();
@@ -78,7 +80,7 @@ app.get('/properties', async (req, res) => {
 app.put('/properties', async (req, res) => {
   try {
     const properties = req.body;
-    writeProperties('./server.properties', properties);
+    writeProperties(SERVER_PROPERTIES_LOCATION, properties);
     res.status(204).send();
   } catch (e) {
     res.status(500).send();
@@ -159,6 +161,9 @@ async function writeProperties(path, properties) {
     const sub_string = `${key}=${properties[key]}\n`;
     string = string.concat(sub_string);
   }
-  const result = await fs.promises.writeFile('./server.properties', string);
+  const result = await fs.promises.writeFile(
+    SERVER_PROPERTIES_LOCATION,
+    string
+  );
   return result;
 }
