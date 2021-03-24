@@ -80,7 +80,7 @@ app.get('/properties', async (req, res) => {
 app.put('/properties', async (req, res) => {
   try {
     const properties = req.body;
-    writeProperties(SERVER_PROPERTIES_LOCATION, properties);
+    await writeProperties(SERVER_PROPERTIES_LOCATION, properties);
     res.status(204).send();
   } catch (e) {
     res.status(500).send();
@@ -161,9 +161,5 @@ async function writeProperties(path, properties) {
     const sub_string = `${key}=${properties[key]}\n`;
     string = string.concat(sub_string);
   }
-  const result = await fs.promises.writeFile(
-    SERVER_PROPERTIES_LOCATION,
-    string
-  );
-  return result;
+  return await fs.promises.writeFile(SERVER_PROPERTIES_LOCATION, string);
 }
