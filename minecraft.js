@@ -68,7 +68,7 @@ app.post('/command', (req, res) => {
 
 app.get('/properties', (req, res) => {
   const text = fs.readFileSync('./server.properties').toString('utf-8');
-  const result = fileToJSON(text);
+  const result = parseProperties(text);
   res.send(result);
 });
 
