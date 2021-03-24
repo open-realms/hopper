@@ -66,23 +66,23 @@ app.post('/command', (req, res) => {
   }, 250);
 });
 
-app.get('/properties', (req, res) => {
-  const text = fs.readFileSync('./server.properties').toString('utf-8');
-  const result = parseProperties(text);
-  res.send(result);
+app.get('/properties', async (req, res) => {
+  try {
+    const result = await getProperties('./server.properties');
+    res.send(result);
+  } catch (e) {
+    res.status(500).send();
+  }
 });
 
-app.put('/properties', (req, res) => {
-  const properties = req.body;
-  let string = '#Minecraft server properties\n#(last boot timestamp)\n';
-  for (const key in properties) {
-    const sub_string = `${key}=${properties[key]}\n`;
-    string = string.concat(sub_string);
+app.put('/properties', async (req, res) => {
+  try {
+    const properties = req.body;
+    writeProperties('./server.properties', properties);
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).send();
   }
-  fs.writeFile('./server.properties', string, function (err) {
-    if (err) return console.log(err);
-  });
-  res.status(204).send();
 });
 
 app.listen(port, () => console.log('Server started'));
@@ -145,4 +145,20 @@ function parseProperties(input) {
   });
 
   return output;
+}
+
+async function getProperties(path) {
+  const text = (await fs.promises.readFile(path)).toString('utf-8');
+
+  return parseProperties(text);
+}
+
+async function writeProperties(path, properties) {
+  let string = '#Minecraft server properties\n#(last boot timestamp)\n';
+  for (const key in properties) {
+    const sub_string = `${key}=${properties[key]}\n`;
+    string = string.concat(sub_string);
+  }
+  const result = await fs.promises.writeFile('./server.properties', string);
+  return result;
 }
