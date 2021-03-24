@@ -133,6 +133,7 @@ function parseProperties(input) {
 
     let parts = line.split('=');
 
+    // this use case handles empty lines and the end of the file
     if (parts[0] === '') {
       return;
     }
